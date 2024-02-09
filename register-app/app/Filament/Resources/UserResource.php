@@ -22,6 +22,7 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Column;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Illuminate\Support\HtmlString;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
@@ -33,7 +34,10 @@ class UserResource extends Resource
         return $form
             ->schema([
                 Card::make()->schema([
-                TextInput::make('name')->required(),
+                TextInput::make('name')
+                    ->required()
+                    ->unique(table: User::class)
+                    ->regex('/^[a-zA-Z0-9_\-]+$/'),
                 TextInput::make('full_name')->required(),
                 TextInput::make('email')->email()->required(),
                 TextInput::make('phone')->required()
@@ -75,6 +79,17 @@ class UserResource extends Resource
                     ->searchable()->copyable(),
                 TextColumn::make('phone')
                     ->searchable()->copyable(),
+                TextColumn::make('last_login_ip')
+                    ->getStateUsing(function ($record) {
+                        $value = $record->last_login_ip;
+                        if (strpos($value, '192') === 0 || strpos($value, '127') === 0) {
+                            return new HtmlString("<span style='color:green;'>$value</span>");
+                        } else {
+                            return new HtmlString("<span style='color:red;'>$value</span>");
+                        }
+                    }),
+                TextColumn::make('last_login_at')
+                    ->color('primary'),
                 ToggleColumn::make('is_active')
                     ->onIcon('heroicon-m-bolt')
                     ->offIcon('heroicon-m-bolt-slash')
