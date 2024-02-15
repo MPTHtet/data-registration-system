@@ -14,21 +14,14 @@
 		"ghcr.io/dhoeric/features/act:1": {},
 		"ghcr.io/shyim/devcontainers-features/php:0": {
 			"installComposer": true,
-			"version": "8.2",
-			"extensions": [
-			  "openssl",
-			  "bcmath",
-			  "curl",
-			  "json",
-			  "mbstring",
-			  "mysql",
-			  "tokenizer",
-			  "xml",
-			  "zip",
-			  "intl"
-			]
-		  },
-		"ghcr.io/wxw-matt/devcontainer-features/command_runner:0": {}
+			"version": "8.2"
+		},
+		"ghcr.io/wxw-matt/devcontainer-features/command_runner:0": {},
+		"ghcr.io/devcontainers/features/node:1": {
+			"nodeGypDependencies": true,
+			"version": "16",
+			"nvmVersion": "latest"
+		}
 	}
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
